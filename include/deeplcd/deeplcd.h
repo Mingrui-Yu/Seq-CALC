@@ -68,7 +68,7 @@ public:
 	void invalidate() 
 	{
 		for (size_t i = 0; i < size(); i++)
-			at(i) = query_result(0, -1.0); // This is needed so old results wont interfere with new ones
+			at(i) = query_result(0, -1.0); // This is needed so old results wont interfere with new onesd
 	}
 };
 
@@ -104,6 +104,10 @@ public:
 
 	DescrVector CalcDescrOriginalImg(const cv::Mat& originalImg);
 	DescrVector CalcDescr(const cv::Mat& im); // make a forward pass through the net, return the descriptor
+
+	int DatabaseSize(){
+		return _mDatabase.mvImageIds.size();
+	}
 
 
 private:
