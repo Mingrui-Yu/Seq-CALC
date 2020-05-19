@@ -71,15 +71,10 @@ void DeepLCD::Add(DescrVector descr_, unsigned int imageId){
 	_mDatabase.mvDescriptorVectors.push_back(descr);
 	_mDatabase.mvvScores.push_back(vScores);
 
-	// if(_mDatabase.mvImageIds.size() == 1){
-	// 	_mDatabase.mDescriptorsMatrix = descr.transpose();
-	// }else{
-	// 	int numRows = _mDatabase.mDescriptorsMatrix.rows();
-	// 	int numCols = _mDatabase.mDescriptorsMatrix.cols();
-	// 	_mDatabase.mDescriptorsMatrix.conservativeResize(
-	// 			numRows + 1, numCols);
-	// 	_mDatabase.mDescriptorsMatrix.row(numRows) = descr.transpose();
-	// }	
+	if(_mDatabase.mvImageIds.size() > ds){
+		_mDatabase.mvvScores[_mDatabase.mvImageIds.size() - 1 - ds].clear();
+	}
+
 }
 
 // -------------------------------------------------------------------------------------------
@@ -177,6 +172,10 @@ void DeepLCD::AddAfterQuery(unsigned int imageId){
 	_mDatabase.mvImageIds.push_back(imageId);
 	_mDatabase.mvDescriptorVectors.push_back(_mCurrentDescrVector);
 	_mDatabase.mvvScores.push_back(_mvCurrentScores);
+
+	if(_mDatabase.mvImageIds.size() > ds){
+		_mDatabase.mvvScores[_mDatabase.mvImageIds.size() - 1 - ds].clear();
+	}
 
 	_bHasQuery = false;
 }

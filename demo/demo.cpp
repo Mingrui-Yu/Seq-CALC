@@ -20,12 +20,12 @@ int main(int argc, char** argv){
 
     std::vector<std::string> vstrImageFilenames;
     std::vector<double> vTimestamps;
-    std::string sequenceDir = "/home/mingrui/Mingrui/SLAMProject/00";
+    std::string sequenceDir = argv[1];
     LoadImages(sequenceDir, vstrImageFilenames, vTimestamps);
 
 
     deeplcd::DeepLCD lcd;
-    lcd.SetParameters(3, 2.0, 0.5, 20); // ds, V_max, V_interval, numMaxResult
+    lcd.SetParameters(3, 2.0, 0.5, 20); // ds, V_max, V_interval, numCandidateResults
 
     for(size_t ni = 0, nImages = vstrImageFilenames.size(); ni < nImages; ni += 10){
         std::cout << "loading image " << ni << "." << std::endl;
@@ -38,11 +38,6 @@ int main(int argc, char** argv){
             std::cout << qr << std::endl;
         }
     }
-
-    
-
-
-
 
     return 0;
 }
@@ -72,7 +67,7 @@ void LoadImages(const string &strPathToSequence, vector<string> &vstrImageFilena
         }
     }
 
-    string strPrefixLeft = strPathToSequence + "/image_0/";  // 使用 rgb 图
+    string strPrefixLeft = strPathToSequence + "/image_0/"; 
 
     const int nTimes = vTimestamps.size();
     vstrImageFilenames.resize(nTimes);

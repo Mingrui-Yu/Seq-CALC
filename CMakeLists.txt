@@ -105,42 +105,6 @@ target_link_libraries( demo
 	${OpenCV_LIBS}
 )
 
-add_executable( test1 demo/test1.cpp )
-target_link_libraries( test1
-	${PROJECT_NAME}
-	${OpenCV_LIBS}
-)
-
-add_executable( test2 demo/test2.cpp )
-target_link_libraries( test2
-	${PROJECT_NAME}
-	${OpenCV_LIBS}
-)
-
-add_executable( test3 demo/test3.cpp )
-target_link_libraries( test3
-	${PROJECT_NAME}
-	${OpenCV_LIBS}
-)
-
-add_executable( test4 demo/test4.cpp )
-target_link_libraries( test4
-	${PROJECT_NAME}
-	${OpenCV_LIBS}
-)
-
-add_executable( test4_2 demo/test4_2.cpp )
-target_link_libraries( test4_2
-	${PROJECT_NAME}
-	${OpenCV_LIBS}
-)
-
-add_executable( test5 demo/test5.cpp )
-target_link_libraries( test5
-	${PROJECT_NAME}
-	${OpenCV_LIBS}
-)
-
 
 
 

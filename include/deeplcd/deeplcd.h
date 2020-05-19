@@ -1,5 +1,5 @@
-#ifndef MYSLAM_DEEPLCD_H
-#define MYSLAM_DEEPLCD_H
+#ifndef SEQ_CALC_H
+#define SEQ_CALC_H
 
 #include "caffe/caffe.hpp"
 
