@@ -1,3 +1,16 @@
+<head>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            inlineMath: [['$','$']]
+            }
+        });
+    </script>
+</head>
+
+
 # Seq-CALC: Lightweight and Robust Deep Loop Detection for SLAM
 
 ## Introduction
@@ -109,11 +122,13 @@ Picture below shows the PR curves in KITTI 00 (above) and KITTI 05 (below):
 
 Table below shows the time cost of these three methods (KITTI 00, 4541 frames, all are average values). Notice that for DBoW3 extracting descriptors contrains two steps: 1) extracting features (in bracket); 2) transforming to BoW vector.
 
+
 |                     |     DBoW3    |   CALC  | Seq-CALC |
 |:-------------------:|:------------:|:-------:|:--------:|
 | Extract descriptors (ms) | (37.3+) 2.75 |   2.46  |   2.65   |
 |   Add to database (ms)   |     0.153    | 0.00643 |  0.00576 |
 |        Query (ms)        |     3.37     |   2.03  |   0.386  |
+
 
 
 Picture below shows the time cost of query in KITTI 00 (4541 frames):
