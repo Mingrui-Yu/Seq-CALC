@@ -22,4 +22,102 @@ The time-adjacent keyframes in SLAM is usually taken in almost the same places, 
   <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/sequence.png">
 </p>
 
+In Seq-CALC, we maintain a local similarity score matrix $S$, which records the similarity scores between every two images in the database (as image above shows). Darker element means higher similarity score. In online SLAM loop detection, we only compare query frames with previous frames, so the matrix is actually a lower triangular matrix. As the sequence length $d_s$ is finite, we only need to store the recent $d_s$ rows of the matrix $S$, as the part in green box.
 
+The process of sequence matching is as follows. For a query frame $I_T$, first, it will find $K$ candidate frames with the highest similarity scores. Then, it will do sequence matching starting from these $K$ candidates. Take the candidate $I_c$ as an example: starting from element $(T, c)$ in matrix $S$, trajectories can be drawn like the red lines. The slope $k$ of the line is related to the speeds when the agent pass this position in two times:
+
+$$  V = \frac{v_{current}}{v_{loop}} = -k  $$
+
+As the relative speed is unknown, we need to search for the optimal speed at intervals ${V_{interval}}$, like the several red lines in above images. In Seq-CALC, users only need to set $V_{max}$ and ${V_{interval}}$, and the values of all $V$ to search are:
+
+$$  V \in \{  \frac{1}{V_{max}}, ..., 1.0, 1.0 + V_{interval}, ..., V_{max}   \}$$
+
+The average of the $S$ elements each red line passes is the trajectory's sequence matching score $s^{seq}$:
+
+$$  s^{seq}(T, c, V) = \frac{1}{d_s} \sum_{t=T-d_s-1}^{T}S(t,j)   $$
+$$ j = c - V(T-t) $$
+
+As a result, the final sequence similarity score between candidate $I_c$ and query frame $I_T$ is:
+
+$$ s^{seq}(T,c) = {max}_V \{  s^{seq}(T,c,V) \}   $$
+
+According to the the sequence similarity score, we can find the best candidate loop frame. We will accept it if the score is higher than a pre-set threshold.
+
+## Evaluation
+
+All the experiments for resource costs are executed on NVIDIA Jetson TX2.
+
+### Offline detection
+We evaluate our CALC's offline performance on four place recoginition datasets with different variations:
+* GardensPoint Day Left vs. Day Right
+* GardensPoint Day Left vs. Night Right
+* CampusLoop
+* Nordland
+
+The comparison methods include:
+* DBoW2
+* AlexNet-conv3
+* VGGNet-pool4+trainedFC
+* NetVLAD
+
+
+Picture below shows the PR curves of these methods in the four testsets:
+
+<p align="center">
+  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_calc.png">
+</p>
+
+Picture below shows the performance of CALC+PCA:
+
+<p align="center">
+  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_calcpca.png">
+</p>
+
+Picture below shows the performance of Seq-CALC with different $d_s$, compared with original CALC and SeqSLAM ($d_s$ = 3):
+
+<p align="center">
+  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_seqcalc.png">
+</p>
+
+Table below shows the resource cost of these methods:
+
+|         Method         | Time cost for extracting descriptors (ms) | Model file size (MB) | Descriptor dimension |
+|:----------------------:|:-----------------------------------------:|:--------------------:|:--------------------:|
+|          CALC          |                    2.46                   |          44          |         1064         |
+|      AlexNet-conv3     |                    61.4                   |          244         |         64896        |
+| VGGNet-pool4+trainedFC |                    68.5                   |          246         |          128         |
+|         NetVLAD        |                    325                    |          596         |         4096         |
+|        Seq-CALC        |                    2.65                   |          44          |          128         |
+
+
+
+### Online detection
+
+We compare the performance of the C++ libraries of Seq-CALC, DBoW3 and CALC in online SLAM loop detection. 
+
+Picture below shows the loops detected by Seq-CALC in KITTI 00 (left) and KITTI 05 (right). Z axis is the time.
+
+<p align="center">
+  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_KITTI_3d.png">
+</p>
+
+Picture below shows the PR curves in KITTI 00 (above) and KITTI 05 (below):
+
+<p align="center">
+  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_KITTI_PR.png">
+</p>
+
+Table below shows the time cost of these three methods (KITTI 00, 4541 frames, all are average values):
+
+|                     |     DBoW3    |   CALC  | Seq-CALC |
+|:-------------------:|:------------:|:-------:|:--------:|
+| Extract descriptors | (37.3+) 2.75 |   2.46  |   2.65   |
+|   Add to database   |     0.153    | 0.00643 |  0.00576 |
+|        Query        |     3.37     |   2.03  |   0.386  |
+
+
+Picture below shows the time cost of query in KITTI 00 (4541 frames):
+
+<p align="center">
+  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/query_speed_3method.png">
+</p>
