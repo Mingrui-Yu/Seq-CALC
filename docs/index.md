@@ -17,7 +17,7 @@
 
 Simultaneous localization and mapping (SLAM) has been widely applied in mobile robots, autonomous driving and other fields. Efficient and robust loop detection is significant in SLAM system, which reduces the accumulative error by detecting loops and then correcting the trajectory and map. In visual SLAM, appearance-based loop detection has become the mainstream due to its adaptability. However, the complex variations in real environment bring great challenges to identify loops by raw images, such as variations of illumination, seasons and viewpoints.
 
-Currently the most widely used loop detection method in visual SLAM system is Bag-of-Words (BoW). However, because of the limitation of artificial features, BoW cannot deal with complex illumination variations. Recently, the development of deep learning has encouraged researchers to use deep network to extract images’ features and detect loops, which has shown higher accuracy. Unfortunately, the deep-learning based methods tend to rely on large-scale networks, and be time-consuming in computation. Besides, they sometimes suffer in adapting to different types of scenes. Therefore, it's hard to embed them in SLAM systems with high real-time requirement and limited computing resources.
+Currently the most widely used loop detection method in visual SLAM system is Bag-of-Words (BoW). However, because of the limitation of artificial features, BoW cannot deal with complex illumination variations. Recently, the development of deep learning has encouraged researchers to use deep network to extract images' features and detect loops, which has shown higher accuracy. Unfortunately, the deep-learning based methods tend to rely on large-scale networks, and be time-consuming in computation. Besides, they sometimes suffer in adapting to different types of scenes. Therefore, it's hard to embed them in SLAM systems with high real-time requirement and limited computing resources.
 
 We propose a lightweight SLAM loop detection method based on deep learning, which is named Seq-CALC. An unsupervised denoising auto-encoder network is trained to extract an image's deep descriptor, which uses the projective-transformed images as input data, and HOG descriptor as the reconstruction object. Besides, we apply PCA to reduce the descriptor's dimension, and combine linear query with fast approximate nearest neighbor search to further improve the efficiency. With the help of sequence match, we significantly improve its accurary. The results of experiments on NVIDIA TX2 demonstrate that, our Seq-CALC outperforms BoW in terms of both accurary and efficiency on various challenging datasets. Its accuary is even close to NetVLAD under certain conditions, which is the state-of-art method in the field of place recognition. We open-source the C++ library of Seq-CALC, which can be conveniently embedded in any SLAM system.
 
@@ -48,6 +48,7 @@ $$  V \in \{  \frac{1}{V_{max}}, ..., 1.0, 1.0 + V_{interval}, ..., V_{max}   \}
 The average of the $S$ elements each red line passes is the trajectory's sequence matching score $s^{seq}$:
 
 $$  s^{seq}(T, c, V) = \frac{1}{d_s} \sum_{t=T-d_s-1}^{T}S(t,j)   $$
+
 $$ j = c - V(T-t) $$
 
 As a result, the final sequence similarity score between candidate $I_c$ and query frame $I_T$ is:
