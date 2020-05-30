@@ -19,7 +19,7 @@ We calculate the similarity score between two images according to the cosine sim
 The time-adjacent keyframes in SLAM is usually taken in almost the same places, so the loop is usually not just connection between two isolated keyframes, but two frame sequences. Inspired by [SeqSLAM](http://www.cim.mcgill.ca/~dudek/417/Resources/seqslam-milford.pdf), we do sequence matching to determine the final loop, which greatly improves the accurary. 
 
 <p align="center">
-  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/sequence.png">
+  <img width="60%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/sequence.png">
 </p>
 
 In Seq-CALC, we maintain a local similarity score matrix $S$, which records the similarity scores between every two images in the database (as image above shows). Darker element means higher similarity score. In online SLAM loop detection, we only compare query frames with previous frames, so the matrix is actually a lower triangular matrix. As the sequence length $d_s$ is finite, we only need to store the recent $d_s$ rows of the matrix $S$, as the part in green box.
@@ -55,28 +55,28 @@ We evaluate our CALC's offline performance on four place recoginition datasets w
 * Nordland
 
 The comparison methods include:
-* DBoW2
+* [DBoW2](https://github.com/dorian3d/DBoW2)
 * AlexNet-conv3
-* VGGNet-pool4+trainedFC
-* NetVLAD
+* [VGGNet-pool4+trainedFC](https://github.com/jmfacil/single-view-place-recognition)
+* [NetVLAD](https://github.com/uzh-rpg/netvlad_tf_open)
 
 
 Picture below shows the PR curves of these methods in the four testsets:
 
 <p align="center">
-  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_calc.png">
+  <img width="80%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_calc.png">
 </p>
 
 Picture below shows the performance of CALC+PCA:
 
 <p align="center">
-  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_calcpca.png">
+  <img width="80%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_calcpca.png">
 </p>
 
 Picture below shows the performance of Seq-CALC with different $d_s$, compared with original CALC and SeqSLAM ($d_s$ = 3):
 
 <p align="center">
-  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_seqcalc.png">
+  <img width="80%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_seqcalc.png">
 </p>
 
 Table below shows the resource cost of these methods:
@@ -93,31 +93,31 @@ Table below shows the resource cost of these methods:
 
 ### Online detection
 
-We compare the performance of the C++ libraries of Seq-CALC, DBoW3 and CALC in online SLAM loop detection. 
+We compare the performance of the C++ libraries of Seq-CALC, [DBoW3](https://github.com/rmsalinas/DBow3) and CALC in online SLAM loop detection. 
 
 Picture below shows the loops detected by Seq-CALC in KITTI 00 (left) and KITTI 05 (right). Z axis is the time.
 
 <p align="center">
-  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_KITTI_3d.png">
+  <img width="80%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_KITTI_3d.png">
 </p>
 
 Picture below shows the PR curves in KITTI 00 (above) and KITTI 05 (below):
 
 <p align="center">
-  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_KITTI_PR.png">
+  <img width="80%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/experiment_KITTI_PR.png">
 </p>
 
-Table below shows the time cost of these three methods (KITTI 00, 4541 frames, all are average values):
+Table below shows the time cost of these three methods (KITTI 00, 4541 frames, all are average values). Notice that for DBoW3 extracting descriptors contrains two steps: 1) extracting features (in bracket); 2) transforming to BoW vector.
 
 |                     |     DBoW3    |   CALC  | Seq-CALC |
 |:-------------------:|:------------:|:-------:|:--------:|
-| Extract descriptors | (37.3+) 2.75 |   2.46  |   2.65   |
-|   Add to database   |     0.153    | 0.00643 |  0.00576 |
-|        Query        |     3.37     |   2.03  |   0.386  |
+| Extract descriptors (ms) | (37.3+) 2.75 |   2.46  |   2.65   |
+|   Add to database (ms)   |     0.153    | 0.00643 |  0.00576 |
+|        Query (ms)        |     3.37     |   2.03  |   0.386  |
 
 
 Picture below shows the time cost of query in KITTI 00 (4541 frames):
 
 <p align="center">
-  <img width="50%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/query_speed_3method.png">
+  <img width="80%" src="https://raw.githubusercontent.com/Mingrui-Yu/Seq-CALC/master/docs/query_speed_3method.png">
 </p>
