@@ -13,6 +13,8 @@
 
 # Seq-CALC: Lightweight and Robust Deep Loop Detection for SLAM
 
+[GitHub](https://github.com/Mingrui-Yu/Seq-CALC)
+
 ## Introduction
 
 Simultaneous localization and mapping (SLAM) has been widely applied in mobile robots, autonomous driving and other fields. Efficient and robust loop detection is significant in SLAM system, which reduces the accumulative error by detecting loops and then correcting the trajectory and map. In visual SLAM, appearance-based loop detection has become the mainstream due to its adaptability. However, the complex variations in real environment bring great challenges to identify loops by raw images, such as variations of illumination, seasons and viewpoints.
